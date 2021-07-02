@@ -6,7 +6,7 @@
 /*   By: yjung <yjung@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/02 17:29:00 by yjung             #+#    #+#             */
-/*   Updated: 2021/07/02 17:30:08 by yjung            ###   ########.fr       */
+/*   Updated: 2021/07/02 20:25:41 by yjung            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,4 +42,25 @@ long long	ft_atoi(const char *nptr)
 		result += *nptr++ - '0';
 	}
 	return (result * flag);
+}
+
+long long	ms_time(struct timeval time)
+{
+	long long	ms_time;
+
+	ms_time = time.tv_sec * 1000 + time.tv_usec / 1000;
+	return (ms_time);
+}
+
+void	print_msg(t_philo *philo, char *str)
+{
+	long long		ms;
+	struct timeval	curr_time;
+
+	pthread_mutex_lock(&philo->info->finish_mutex);
+	gettimeofday(&curr_time, NULL);
+	ms = ms_time(curr_time) - ms_time(philo->info->time);
+	if (!philo->info->finish)
+		printf("%lld\t%d\t %s\n", ms, philo->n + 1, str);
+	pthread_mutex_unlock(&philo->info->finish_mutex);
 }
