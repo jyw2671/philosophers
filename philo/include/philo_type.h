@@ -6,7 +6,7 @@
 /*   By: yjung <yjung@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/02 16:19:14 by yjung             #+#    #+#             */
-/*   Updated: 2021/07/02 18:25:26 by yjung            ###   ########.fr       */
+/*   Updated: 2021/07/04 19:13:41 by yjung            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,12 +15,6 @@
 
 # define SUCCESS	0
 # define FAIL		1
-
-# define NUM_OF_PHILO	1
-# define TIME_TO_DIE	2
-# define TIME_TO_EAT	3
-# define TIME_TO_SLEEP	4
-# define MUST_EAT		5
 
 typedef struct s_philo
 {
@@ -32,7 +26,6 @@ typedef struct s_philo
 	pthread_t		thread;
 	struct s_info	*info;
 	struct timeval	last_time_to_eat;
-
 }	t_philo;
 
 typedef struct s_info

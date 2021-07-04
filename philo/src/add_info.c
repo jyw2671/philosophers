@@ -6,79 +6,90 @@
 /*   By: yjung <yjung@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/02 15:39:38 by yjung             #+#    #+#             */
-/*   Updated: 2021/07/02 18:00:36 by yjung            ###   ########.fr       */
+/*   Updated: 2021/07/04 18:14:07 by yjung            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-static int	is_int(char *str)
+static void	parsing_info(t_info *info, int argc)
 {
-	int	i;
+	info->num_of_philo = ft_atoi(argv[1]);
+	info->time_to_die = ft_atoi(argv[2]);
+	info->time_to_eat = ft_atoi(argv[3]);
+	info->time_to_sleep = ft_atoi(argv[4]);
+	if (argc == 6)
+		info->must_eat = ft_atoi(argv[5]);
+}
 
-	i = -1;
-	if (str[0] == '-')
-		i++;
-	while (str[++i])
-	{
-		if (!ft_isdigit(str[i]))
-			return (FAIL);
-	}
+static int	check_info(t_info *info, int argc, char *argv[])
+{
+	int	status;
+
+	status = 0;
+	info->num_of_philo = ft_atoi(argv[1]);
+	info->time_to_die = ft_atoi(argv[2]);
+	info->time_to_eat = ft_atoi(argv[3]);
+	info->time_to_sleep = ft_atoi(argv[4]);
+	if (argc == 6)
+		info->must_eat = ft_atoi(argv[5]);
+	if (argc == 6 && info->must_eat <= 0 && ++status >= 0)
+		printf("ERROR: wrong num of must eat\n");
+	if (info->num_of_philo < 0 && ++status >= 0)
+		printf("ERROR: wrong num of philo\n");
+	if (info->time_to_die < 0 && ++status >= 0)
+		printf("ERROR: wrong time to die\n");
+	if (info->time_to_eat < 0 && ++status >= 0)
+		printf("ERROR: wrong time to eat\n");
+	if (info->time_to_sleep < 0 && ++status >= 0)
+		printf("ERROR: wrong time to sleep\n");
+	if (status != 0)
+		return (FAIL);
 	return (SUCCESS);
 }
 
-static int	check_num(char *str, long long *num, t_philo *ph)
-{
-	if (!is_int(str))
-		return (FAIL);
-	*num = ft_atoi(str);
-	if (*num > __INT_MAX__ || *num < (-__INT_MAX__ - 1))
-		return (FAIL);
-	return (SUCCESS);
-}
-
-static void	store_info(t_info **info, long long num, int status)
-{
-	if (status == NUM_OF_PHILO)
-		(*info)->num_of_philo = num;
-	else if (status == TIME_TO_DIE)
-		(*info)->time_to_die = num;
-	else if (status == TIME_TO_EAT)
-		(*info)->time_to_eat = num;
-	else if (status == TIME_TO_SLEEP)
-		(*info)->time_to_sleep = num;
-	else if (status == MUST_EAT)
-		(*info)->must_eat = num;
-}
-
-static int	check_info(t_info **info, char *av, int status)
-{
-	char		**tmp;
-	long long	num;
-	int			i;
-
-	tmp = ft_split(av, ' ');
-	i = -1;
-	while (tmp[++i])
-	{
-		if (!check_num(tmp[i], &num, *info))
-			return (free_split(&tmp));
-		store_info(info, num, status);
-		free(tmp[i]);
-	}
-	free(tmp);
-	return (1);
-}
-
-int	add_info(t_info **info, char *av[])
+static int	set_philo_info(t_info *info)
 {
 	int		i;
 
-	i = 0;
-	while (av[++i])
+	pthread_mutex_init(&info->finish_mutex, NULL);
+	if (ft_malloc(&info->philos, sizeof(t_philo) * info->num_of_philo) || \
+		ft_malloc(&info->forks, sizeof(pthread_mutex_t) * info->num_of_philo))
 	{
-		if (!check_info(info, av[i], i))
-			return (FAIL);
+		printf("ERROR: malloc failed\n");
+		return (FAIL);
 	}
+	i = -1;
+	while (++i < info->num_of_philo)
+	{
+		info->philos[i].n = i;
+		pthread_mutex_init(&info->forks[i], NULL);
+		pthread_mutex_init(&info->philos[i].check_mutex, NULL);
+		if (i == 0)
+			info->philos[i].left = &info->forks[info->num_of_philo - 1];
+		else
+			info->philos[i].left = &info->forks[i - 1];
+		info->philos[i].right = &info->forks[i];
+		info->philos[i].info = info;
+	}
+	return (SUCCESS);
+}
+
+int	add_info(t_info *info, int argc, char *argv[])
+{
+	parsing_info(info, argc, argv);
+	if (check_info(info, argc))
+		return (FAIL);
+	if (set_philo_info(info))
+		return (FAIL);
+	return (SUCCESS);
+}
+
+int	ft_malloc(void *dst, size_t size)
+{
+	*(void **)dst = malloc(size);
+	if (*(void **)dst == NULL)
+		return (FAIL);
+	memset(*(void **)dst, 0, size);
 	return (SUCCESS);
 }
