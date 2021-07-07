@@ -1,35 +1,30 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   end_philo.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: yjung <yjung@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/07/02 15:14:19 by yjung             #+#    #+#             */
-/*   Updated: 2021/07/07 16:20:43 by yjung            ###   ########.fr       */
+/*   Created: 2021/07/07 15:56:08 by yjung             #+#    #+#             */
+/*   Updated: 2021/07/07 19:05:35 by yjung            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-int	main(int ac, char *av[])
+void	end_philo(t_info *info)
 {
-	t_info	info;
+	int	i;
 
-	if (ac < 5 || ac > 6)
+	i = -1;
+	while (++i < info->num_of_philo)
 	{
-		printf("Wrong number of arguments\n");
-		return (FAIL);
+		pthread_join(info->philos[i].thread, NULL);
+		pthread_mutex_destroy(&info->philos[i].check_mutex);
 	}
-	memset(&info, 0, sizeof(t_info));
-	if (add_info(&info, ac, av))
-		return (FAIL);
-	if (init_philo(&info))
-	{
-		end_philo(&info);
-		printf("ERROR: pthread_create fail\n");
-		return (FAIL);
-	}
-	end_philo(&info);
-	return (SUCCESS);
+	free(info->philos);
+	i = -1;
+	while (++i < info->num_of_philo)
+		pthread_mutex_destroy(&info->forks[i]);
+	free(info->forks);
 }

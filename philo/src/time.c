@@ -1,26 +1,40 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   exit_free.c                                        :+:      :+:    :+:   */
+/*   time.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: yjung <yjung@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/07/02 15:41:12 by yjung             #+#    #+#             */
-/*   Updated: 2021/07/02 15:41:54 by yjung            ###   ########.fr       */
+/*   Created: 2021/07/07 20:45:10 by yjung             #+#    #+#             */
+/*   Updated: 2021/07/07 20:57:06 by yjung            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-int	free_split(char ***str)
+static long long	get_time(void)
 {
-	int	i;
+	struct timeval	time;
+	long long		ms;
 
-	i = -1;
-	if (*str == NULL)
-		return (0);
-	while ((*str)[++i])
-		free((*str)[i]);
-	free(*str);
-	return (0);
+	gettimeofday(&time, NULL);
+	ms = ms_time(time);
+	return (ms);
+}
+
+long long	ms_time(struct timeval time)
+{
+	long long	ms_time;
+
+	ms_time = time.tv_sec * 1000 + time.tv_usec / 1000;
+	return (ms_time);
+}
+
+void	ft_usleep(int num)
+{
+	long long	time;
+
+	time = get_time();
+	while (get_time() - time <= num)
+		usleep(1000);
 }

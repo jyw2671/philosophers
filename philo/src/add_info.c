@@ -6,34 +6,33 @@
 /*   By: yjung <yjung@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/02 15:39:38 by yjung             #+#    #+#             */
-/*   Updated: 2021/07/04 18:14:07 by yjung            ###   ########.fr       */
+/*   Updated: 2021/07/07 17:48:59 by yjung            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-static void	parsing_info(t_info *info, int argc)
+static int	ft_malloc(void *dst, size_t size)
 {
-	info->num_of_philo = ft_atoi(argv[1]);
-	info->time_to_die = ft_atoi(argv[2]);
-	info->time_to_eat = ft_atoi(argv[3]);
-	info->time_to_sleep = ft_atoi(argv[4]);
-	if (argc == 6)
-		info->must_eat = ft_atoi(argv[5]);
+	*(void **)dst = malloc(size);
+	if (*(void **)dst == NULL)
+		return (FAIL);
+	memset(*(void **)dst, 0, size);
+	return (SUCCESS);
 }
 
-static int	check_info(t_info *info, int argc, char *argv[])
+static int	check_info(t_info *info, int ac, char *av[])
 {
 	int	status;
 
 	status = 0;
-	info->num_of_philo = ft_atoi(argv[1]);
-	info->time_to_die = ft_atoi(argv[2]);
-	info->time_to_eat = ft_atoi(argv[3]);
-	info->time_to_sleep = ft_atoi(argv[4]);
-	if (argc == 6)
-		info->must_eat = ft_atoi(argv[5]);
-	if (argc == 6 && info->must_eat <= 0 && ++status >= 0)
+	info->num_of_philo = ft_atoi(av[1]);
+	info->time_to_die = ft_atoi(av[2]);
+	info->time_to_eat = ft_atoi(av[3]);
+	info->time_to_sleep = ft_atoi(av[4]);
+	if (ac == 6)
+		info->must_eat = ft_atoi(av[5]);
+	if (ac == 6 && info->must_eat <= 0 && ++status >= 0)
 		printf("ERROR: wrong num of must eat\n");
 	if (info->num_of_philo < 0 && ++status >= 0)
 		printf("ERROR: wrong num of philo\n");
@@ -75,21 +74,11 @@ static int	set_philo_info(t_info *info)
 	return (SUCCESS);
 }
 
-int	add_info(t_info *info, int argc, char *argv[])
+int	add_info(t_info *info, int ac, char *av[])
 {
-	parsing_info(info, argc, argv);
-	if (check_info(info, argc))
+	if (check_info(info, ac, av))
 		return (FAIL);
 	if (set_philo_info(info))
 		return (FAIL);
-	return (SUCCESS);
-}
-
-int	ft_malloc(void *dst, size_t size)
-{
-	*(void **)dst = malloc(size);
-	if (*(void **)dst == NULL)
-		return (FAIL);
-	memset(*(void **)dst, 0, size);
 	return (SUCCESS);
 }

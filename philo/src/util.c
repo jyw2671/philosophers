@@ -6,7 +6,7 @@
 /*   By: yjung <yjung@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/02 17:29:00 by yjung             #+#    #+#             */
-/*   Updated: 2021/07/02 20:25:41 by yjung            ###   ########.fr       */
+/*   Updated: 2021/07/07 20:55:35 by yjung            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ static int	ft_isspace(char c)
 	return (0);
 }
 
-int	ft_isdigit(int c)
+static int	ft_isdigit(int c)
 {
 	return (c >= '0' && c <= '9');
 }
@@ -42,14 +42,6 @@ long long	ft_atoi(const char *nptr)
 		result += *nptr++ - '0';
 	}
 	return (result * flag);
-}
-
-long long	ms_time(struct timeval time)
-{
-	long long	ms_time;
-
-	ms_time = time.tv_sec * 1000 + time.tv_usec / 1000;
-	return (ms_time);
 }
 
 void	print_msg(t_philo *philo, char *str)
