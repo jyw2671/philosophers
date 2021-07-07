@@ -6,7 +6,7 @@
 /*   By: yjung <yjung@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/02 15:39:38 by yjung             #+#    #+#             */
-/*   Updated: 2021/07/07 17:48:59 by yjung            ###   ########.fr       */
+/*   Updated: 2021/07/07 21:42:13 by yjung            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,11 +64,8 @@ static int	set_philo_info(t_info *info)
 		info->philos[i].n = i;
 		pthread_mutex_init(&info->forks[i], NULL);
 		pthread_mutex_init(&info->philos[i].check_mutex, NULL);
-		if (i == 0)
-			info->philos[i].left = &info->forks[info->num_of_philo - 1];
-		else
-			info->philos[i].left = &info->forks[i - 1];
-		info->philos[i].right = &info->forks[i];
+		info->philos[i].left = (i + 1) % info->num_of_philo;
+		info->philos[i].right = i;
 		info->philos[i].info = info;
 	}
 	return (SUCCESS);

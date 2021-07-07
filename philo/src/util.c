@@ -6,7 +6,7 @@
 /*   By: yjung <yjung@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/02 17:29:00 by yjung             #+#    #+#             */
-/*   Updated: 2021/07/07 20:55:35 by yjung            ###   ########.fr       */
+/*   Updated: 2021/07/07 22:19:50 by yjung            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,13 +46,20 @@ long long	ft_atoi(const char *nptr)
 
 void	print_msg(t_philo *philo, char *str)
 {
-	long long		ms;
-	struct timeval	curr_time;
-
 	pthread_mutex_lock(&philo->info->finish_mutex);
-	gettimeofday(&curr_time, NULL);
-	ms = ms_time(curr_time) - ms_time(philo->info->time);
+	if (philo->info->finish)
+	{
+		pthread_mutex_unlock(&philo->info->finish_mutex);
+		return ;
+	}
 	if (!philo->info->finish)
-		printf("%lld\t%d\t %s\n", ms, philo->n + 1, str);
+		printf("%lld\t%d\t %s\n", get_time() - ms_time(philo->info->time), \
+			philo->n + 1, str);
 	pthread_mutex_unlock(&philo->info->finish_mutex);
+}
+
+void	put_down_fork(t_philo *philo)
+{
+	pthread_mutex_unlock(&(philo->info->forks[philo->left]));
+	pthread_mutex_unlock(&(philo->info->forks[philo->right]));
 }

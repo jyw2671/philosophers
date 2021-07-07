@@ -6,7 +6,7 @@
 /*   By: yjung <yjung@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/02 16:19:14 by yjung             #+#    #+#             */
-/*   Updated: 2021/07/07 21:20:58 by yjung            ###   ########.fr       */
+/*   Updated: 2021/07/07 21:23:42 by yjung            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,8 +20,8 @@ typedef struct s_philo
 {
 	int				n;
 	int				num_of_eat;
-	pthread_mutex_t	*left;
-	pthread_mutex_t	*right;
+	int				left;
+	int				right;
 	pthread_mutex_t	check_mutex;
 	pthread_t		thread;
 	struct s_info	*info;

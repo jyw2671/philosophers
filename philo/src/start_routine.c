@@ -6,7 +6,7 @@
 /*   By: yjung <yjung@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/02 20:06:17 by yjung             #+#    #+#             */
-/*   Updated: 2021/07/07 21:04:33 by yjung            ###   ########.fr       */
+/*   Updated: 2021/07/07 22:19:22 by yjung            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,31 +14,22 @@
 
 static void	taken_a_fork(t_philo *philo)
 {
-	pthread_mutex_lock(philo->right);
+	pthread_mutex_lock(&(philo->info->forks[philo->right]));
 	print_msg(philo, "has taken a fork");
-	pthread_mutex_lock(philo->left);
+	pthread_mutex_lock(&(philo->info->forks[philo->left]));
 	print_msg(philo, "has taken a fork");
 }
 
 static void	eating(t_philo *philo)
 {
-	long long	ms;
-
 	pthread_mutex_lock(&philo->check_mutex);
-	gettimeofday(&philo->last_time_to_eat, NULL);
-	ms = ms_time(philo->last_time_to_eat) - \
-		ms_time(philo->info->time);
-	pthread_mutex_lock(&philo->info->finish_mutex);
-	if (!philo->info->finish)
-		printf("%lld\t%d\t %s\n", ms, philo->n + 1, "is eating");
+	print_msg(philo, "is eating");
 	philo->num_of_eat += 1;
 	if (philo->num_of_eat == philo->info->must_eat)
 		philo->info->num_of_finish_philo += 1;
-	pthread_mutex_unlock(&philo->info->finish_mutex);
 	ft_usleep(philo->info->time_to_eat);
-	pthread_mutex_unlock(philo->right);
-	pthread_mutex_unlock(philo->left);
 	pthread_mutex_unlock(&philo->check_mutex);
+	put_down_fork(philo);
 }
 
 static void	sleeping(t_philo *philo)

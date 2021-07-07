@@ -6,7 +6,7 @@
 /*   By: yjung <yjung@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/02 15:14:45 by yjung             #+#    #+#             */
-/*   Updated: 2021/07/07 20:56:02 by yjung            ###   ########.fr       */
+/*   Updated: 2021/07/07 22:20:42 by yjung            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,9 @@ int			add_info(t_info *info, int ac, char *av[]);
 // util.c
 long long	ft_atoi(const char *nptr);
 void		print_msg(t_philo *philo, char *str);
+void		put_down_fork(t_philo *philo);
 // time.c
+long long	get_time(void);
 long long	ms_time(struct timeval time);
 void		ft_usleep(int num);
 // set_philo.c

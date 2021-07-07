@@ -6,13 +6,13 @@
 /*   By: yjung <yjung@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/07 20:45:10 by yjung             #+#    #+#             */
-/*   Updated: 2021/07/07 20:57:06 by yjung            ###   ########.fr       */
+/*   Updated: 2021/07/07 22:20:30 by yjung            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-static long long	get_time(void)
+long long	get_time(void)
 {
 	struct timeval	time;
 	long long		ms;
