@@ -6,7 +6,7 @@
 /*   By: yjung <yjung@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/02 17:29:00 by yjung             #+#    #+#             */
-/*   Updated: 2021/07/07 22:19:50 by yjung            ###   ########.fr       */
+/*   Updated: 2021/07/16 15:06:50 by yjung            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ long long	ft_atoi(const char *nptr)
 	return (result * flag);
 }
 
-void	print_msg(t_philo *philo, char *str)
+void	print_msg(t_philo *philo, char *str, int status)
 {
 	pthread_mutex_lock(&philo->info->finish_mutex);
 	if (philo->info->finish)
@@ -52,8 +52,11 @@ void	print_msg(t_philo *philo, char *str)
 		pthread_mutex_unlock(&philo->info->finish_mutex);
 		return ;
 	}
-	if (!philo->info->finish)
-		printf("%lld\t%d\t %s\n", get_time() - ms_time(philo->info->time), \
+	if (status == FULL)
+		printf("%lld\tall philosopers have eaten enough", \
+		get_time() - philo->info->time);
+	else
+		printf("%lld\t%d\t %s\n", get_time() - philo->info->time, \
 			philo->n + 1, str);
 	pthread_mutex_unlock(&philo->info->finish_mutex);
 }

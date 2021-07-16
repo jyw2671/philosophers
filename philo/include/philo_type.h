@@ -6,7 +6,7 @@
 /*   By: yjung <yjung@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/02 16:19:14 by yjung             #+#    #+#             */
-/*   Updated: 2021/07/07 21:23:42 by yjung            ###   ########.fr       */
+/*   Updated: 2021/07/16 15:11:21 by yjung            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,9 @@
 
 # define SUCCESS	0
 # define FAIL		1
+
+# define DIED		1
+# define FULL		2
 
 typedef struct s_philo
 {
@@ -25,7 +28,7 @@ typedef struct s_philo
 	pthread_mutex_t	check_mutex;
 	pthread_t		thread;
 	struct s_info	*info;
-	struct timeval	last_time_to_eat;
+	long long		last_time_to_eat;
 }	t_philo;
 
 typedef struct s_info
@@ -40,7 +43,7 @@ typedef struct s_info
 	pthread_mutex_t	finish_mutex;
 	t_philo			*philos;
 	pthread_mutex_t	*forks;
-	struct timeval	time;
+	long long		time;
 }	t_info;
 
 #endif
